@@ -1,9 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 
-export const Todo = ({todo, onRemove}) => {
+export const Todo = ({todo, onRemove, onOpen}) => {
 	const handlePress = () => {
 		console.log('Todo pressed');
+		onOpen(todo.id);
 	};
 
 	const handleLongPress = () => {

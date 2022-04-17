@@ -41,8 +41,15 @@ export default function App() {
 		setTodos(todos.filter(todo => todo.id !== id));
 	};
 
-	let content = <MainScreen todos={todos} addTodo={addTodo} removeTodo={removeTodo}/>;
-	if (content) content = <TodoScreen todos={todos}/>;
+	const handleBack = () => {
+		setTodoId(null);
+	};
+
+	let content = <MainScreen todos={todos} addTodo={addTodo} removeTodo={removeTodo} openTodo={setTodoId}/>;
+	if (todoId) {
+		const currentTodo = todos.find(todo => todo.id === todoId);
+		content = <TodoScreen todo={currentTodo} goBack={handleBack}/>;
+	}
 
 	return (
 		<View>

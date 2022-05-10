@@ -5,7 +5,7 @@ import {MainScreen} from './src/screens/MainScreen';
 import {TodoScreen} from './src/screens/TodoScreen';
 
 export default function App() {
-	const [todoId, setTodoId] = useState(1);
+	const [todoId, setTodoId] = useState(null);
 	const [todos, setTodos] = useState([
 		{
 			id: 1,
@@ -38,6 +38,7 @@ export default function App() {
 
 	const removeTodo = (id) => {
 		const todo = todos.find(todo => todo.id === id);
+
 		Alert.alert('Delete', `Delete "${todo.title}"?`, [
 			{text: 'Cancel', style: 'cancel'},
 			{

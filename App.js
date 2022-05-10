@@ -44,10 +44,18 @@ export default function App() {
 				text: 'Delete',
 				style: 'destructive',
 				onPress: () => {
-					setTodoId(null)
+					setTodoId(null);
 					setTodos(todos.filter(todo => todo.id !== id));
 				}
 			}], {cancelable: true});
+	};
+
+	const updateTodo = (id, title) => {
+		setTodos(old =>
+			old.map(todo => {
+				if (todo.id === id) todo.title = title;
+				return todo;
+			}));
 	};
 
 	const handleBack = () => {
@@ -57,7 +65,12 @@ export default function App() {
 	let content = <MainScreen todos={todos} addTodo={addTodo} removeTodo={removeTodo} openTodo={setTodoId}/>;
 	if (todoId) {
 		const currentTodo = todos.find(todo => todo.id === todoId);
-		content = <TodoScreen todo={currentTodo} goBack={handleBack} onRemove={removeTodo}/>;
+		content = <TodoScreen
+			onSave={updateTodo}
+			todo={currentTodo}
+			goBack={handleBack}
+			onRemove={removeTodo}
+		/>;
 	}
 
 	return (

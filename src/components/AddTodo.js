@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, StyleSheet, TextInput, View, Alert} from 'react-native';
+import {StyleSheet, TextInput, View, Alert, Keyboard} from 'react-native';
 import {AntDesign} from '@expo/vector-icons';
 import {THEME} from '../theme';
 
@@ -9,6 +9,7 @@ export const AddTodo = ({onSubmit}) => {
 	const pressHandler = () => {
 		if (value.trim()) {
 			onSubmit(value);
+			Keyboard.dismiss();
 			setValue('');
 		} else {
 			Alert.alert('Error', 'You must enter a value!', [{text: 'OK'}]);
@@ -23,13 +24,12 @@ export const AddTodo = ({onSubmit}) => {
 				style={styles.input}
 				autoCorrect={true}
 				autoCapitalize="none"
-				keyboardType="number-pad"
 			/>
 			<AntDesign.Button
 				onPress={pressHandler}
 				name="pluscircle"
 				size={24}
-				color="black">
+			>
 				Add
 			</AntDesign.Button>
 		</View>
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		marginBottom: 15,
+		marginBottom: 15
 	},
 	input: {
 		flex: 1,
@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
 		borderStyle: 'solid',
 		borderColor: THEME.MAIN_COLOR,
 		padding: 5,
-		marginRight: 10,
+		marginRight: 10
 	}
 });

@@ -1,19 +1,14 @@
 import React from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
-import {THEME} from '../theme';
 import {AppTextBold} from './ui/AppTextBold';
 
-export const Todo = ({todo, onRemove, onOpen}) => {
+export const Todo = ({todo, onOpen}) => {
 	const handlePress = () => {
 		onOpen(todo.id);
 	};
 
-	const handleLongPress = () => {
-		onRemove(todo.id);
-	};
-
 	return (
-		<TouchableOpacity onPress={handlePress} onLongPress={handleLongPress}>
+		<TouchableOpacity onPress={handlePress}>
 			<View style={styles.todo}>
 				<AppTextBold>{todo.title}</AppTextBold>
 			</View>

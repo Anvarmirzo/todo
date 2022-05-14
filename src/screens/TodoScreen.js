@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Dimensions} from 'react-native';
 import {FontAwesome, AntDesign} from '@expo/vector-icons';
 import {THEME} from '../theme';
 import {AppButton} from '../components/ui/AppButton';
@@ -58,11 +58,15 @@ export const TodoScreen = ({goBack, todo, onRemove, onSave}) => {
 const styles = StyleSheet.create({
 	buttons: {
 		flexDirection: 'row', justifyContent: 'space-between'
-	}, button: {
-		width: '40%'
-	}, card: {
+	},
+	button: {
+		// width: Dimensions.get('window').width / 3,
+		width: Dimensions.get('window').width > 400 ? 150 : 100
+	},
+	card: {
 		marginBottom: 20
-	}, title: {
+	},
+	title: {
 		fontSize: 20
 	}
 });

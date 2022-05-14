@@ -3,7 +3,7 @@ import {Platform, StyleSheet, View} from 'react-native';
 import {THEME} from '../theme';
 import {AppTextBold} from './ui/AppTextBold';
 
-export const Navbar = () => {
+export const Navbar = ({title}) => {
 	return (
 		<View style={{
 			...styles.navbar, ...Platform.select({
@@ -11,7 +11,7 @@ export const Navbar = () => {
 				android: styles.navbarAndroid
 			})
 		}}>
-			<AppTextBold style={styles.text}>Todo App</AppTextBold>
+			<AppTextBold style={styles.text}>{title}</AppTextBold>
 		</View>
 	);
 };

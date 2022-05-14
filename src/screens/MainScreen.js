@@ -1,55 +1,58 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, StyleSheet, FlatList, Image, Dimensions} from 'react-native';
 import {AddTodo} from '../components/AddTodo';
 import {Todo} from '../components/Todo';
+import {ScreenContext} from '../context/screen/ScreenContext';
+import {TodoContext} from '../context/todo/TodoContext';
 import {THEME} from '../theme';
 
-export const MainScreen = ({addTodo, removeTodo, todos, openTodo}) => {
-		const [deviceWidth, setDeviceWidth] = useState(Dimensions.get('window').width - (THEME.PADDING_HORIZONTAL * 2));
+export const MainScreen = () => {
+	const {addTodo, removeTodo, todos} = useContext(TodoContext);
+	const {changeScreen} = useContext(ScreenContext);
 
-		useEffect(() => {
-			const update = () => {
-				const width = Dimensions.get('window').width - (THEME.PADDING_HORIZONTAL * 2);
-				setDeviceWidth(width);
-			};
+	const [deviceWidth, setDeviceWidth] = useState(Dimensions.get('window').width - (THEME.PADDING_HORIZONTAL * 2));
 
-			Dimensions.addEventListener('change', update);
+	useEffect(() => {
+		const update = () => {
+			const width = Dimensions.get('window').width - (THEME.PADDING_HORIZONTAL * 2);
+			setDeviceWidth(width);
+		};
 
-			return () => {
-				Dimensions.removeEventListener('change', update);
-			};
-		}, []);
+		Dimensions.addEventListener('change', update);
+
+		return () => {
+			Dimensions.removeEventListener('change', update);
+		};
+	}, []);
 
 
-		let content =
-			<View style={styles.imgWrap}>
-				<Image
-					style={styles.image}
-					source={require('../../assets/no-items.png')}
+	let content =
+		<View style={styles.imgWrap}>
+			<Image
+				style={styles.image}
+				source={require('../../assets/no-items.png')}
+			/>
+		</View>;
+	if (todos.length > 0) {
+		content =
+			<View style={{width: deviceWidth}}>
+				<FlatList
+					data={todos}
+					renderItem={({item}) => <Todo
+						todo={item}
+						onRemove={removeTodo}
+						onOpen={changeScreen}
+					/>}
+					keyExtractor={item => item.id}
 				/>
 			</View>;
-
-		if (todos.length > 0) {
-			content =
-				<View style={{width: deviceWidth}}>
-					<FlatList
-						data={todos}
-						renderItem={({item}) => <Todo
-							todo={item}
-							onRemove={removeTodo}
-							onOpen={openTodo}
-						/>}
-						keyExtractor={item => item.id}
-					/>
-				</View>;
-		}
-
-		return (<View>
-			<AddTodo onSubmit={addTodo}/>
-			{content}
-		</View>);
 	}
-;
+
+	return (<View>
+		<AddTodo onSubmit={addTodo}/>
+		{content}
+	</View>);
+};
 
 const styles = StyleSheet.create({
 	imgWrap: {

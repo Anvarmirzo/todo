@@ -1,17 +1,28 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, Dimensions} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {View, StyleSheet, Dimensions, Alert} from 'react-native';
 import {FontAwesome, AntDesign} from '@expo/vector-icons';
+import {ScreenContext} from '../context/screen/ScreenContext';
+import {TodoContext} from '../context/todo/TodoContext';
 import {THEME} from '../theme';
 import {AppButton} from '../components/ui/AppButton';
 import {EditModal} from '../components/EditModal';
 import {AppCard} from '../components/ui/AppCard';
 import {AppTextBold} from '../components/ui/AppTextBold';
 
-export const TodoScreen = ({goBack, todo, onRemove, onSave}) => {
+export const TodoScreen = () => {
+	const {removeTodo, updateTodo, todos} = useContext(TodoContext);
+	const {todoId, changeScreen} = useContext(ScreenContext);
+
 	const [modal, setModal] = useState(false);
 
+	const todo = todos.find(todo => todo.id === todoId);
+
+	const handleBack = () => {
+		changeScreen(null);
+	};
+
 	const saveHandler = (title) => {
-		onSave(todo.id, title);
+		updateTodo(todo.id, title);
 		setModal(false);
 	};
 
@@ -20,7 +31,19 @@ export const TodoScreen = ({goBack, todo, onRemove, onSave}) => {
 	};
 
 	const deleteHandler = () => {
-		onRemove(todo.id);
+		Alert.alert('Delete', `Delete "${todo.title}"?`, [
+			{
+				text: 'Cancel',
+				style: 'cancel'
+			},
+			{
+				text: 'Delete',
+				style: 'destructive',
+				onPress: () => {
+					changeScreen(null);
+					removeTodo(todoId);
+				}
+			}], {cancelable: true});
 	};
 
 	const cancelHandler = () => {
@@ -42,7 +65,7 @@ export const TodoScreen = ({goBack, todo, onRemove, onSave}) => {
 		</AppCard>
 		<View style={styles.buttons}>
 			<View style={styles.button}>
-				<AppButton color={THEME.GRAY_COLOR} onPress={goBack}>
+				<AppButton color={THEME.GRAY_COLOR} onPress={handleBack}>
 					<AntDesign name="arrowleft" size={20}/>
 				</AppButton>
 			</View>

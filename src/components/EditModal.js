@@ -5,12 +5,18 @@ import {AppButton} from './ui/AppButton';
 
 export const EditModal = ({isVisible, onCancel, onSave, value}) => {
 	const [title, setTitle] = useState(value);
+
 	const saveHandler = () => {
 		if (title.trim().length < 3) {
 			Alert.alert('Error', 'Title must be at least 3 characters long', [{text: 'OK'}]);
 		} else {
 			onSave(title);
 		}
+	};
+
+	const cancelHandler = () => {
+		setTitle(value);
+		onCancel();
 	};
 
 	return (
@@ -27,7 +33,7 @@ export const EditModal = ({isVisible, onCancel, onSave, value}) => {
 
 				/>
 				<View style={styles.buttons}>
-					<AppButton onPress={onCancel} color={THEME.DANGER_COLOR}>
+					<AppButton onPress={cancelHandler} color={THEME.DANGER_COLOR}>
 						Cancel
 					</AppButton>
 					<AppButton onPress={saveHandler}>

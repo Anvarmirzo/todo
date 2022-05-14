@@ -1,32 +1,55 @@
-import React from 'react';
-import {Text, View, StyleSheet, FlatList, Image} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, FlatList, Image, Dimensions} from 'react-native';
 import {AddTodo} from '../components/AddTodo';
 import {Todo} from '../components/Todo';
+import {THEME} from '../theme';
 
 export const MainScreen = ({addTodo, removeTodo, todos, openTodo}) => {
-	let content =
-		<View style={styles.imgWrap}>
-			<Image
-				style={styles.image}
-				source={require('../../assets/no-items.png')}
-			/>
-		</View>;
+		const [deviceWidth, setDeviceWidth] = useState(Dimensions.get('window').width - (THEME.PADDING_HORIZONTAL * 2));
 
-	if (todos.length > 0) content = <FlatList
-		data={todos}
-		renderItem={({item}) => <Todo
-			todo={item}
-			onRemove={removeTodo}
-			onOpen={openTodo}
-		/>}
-		keyExtractor={item => item.id}
-	/>;
+		useEffect(() => {
+			const update = () => {
+				const width = Dimensions.get('window').width - (THEME.PADDING_HORIZONTAL * 2);
+				setDeviceWidth(width);
+			};
 
-	return (<View>
-		<AddTodo onSubmit={addTodo}/>
-		{content}
-	</View>);
-};
+			Dimensions.addEventListener('change', update);
+
+			return () => {
+				Dimensions.removeEventListener('change', update);
+			};
+		}, []);
+
+
+		let content =
+			<View style={styles.imgWrap}>
+				<Image
+					style={styles.image}
+					source={require('../../assets/no-items.png')}
+				/>
+			</View>;
+
+		if (todos.length > 0) {
+			content =
+				<View style={{width: deviceWidth}}>
+					<FlatList
+						data={todos}
+						renderItem={({item}) => <Todo
+							todo={item}
+							onRemove={removeTodo}
+							onOpen={openTodo}
+						/>}
+						keyExtractor={item => item.id}
+					/>
+				</View>;
+		}
+
+		return (<View>
+			<AddTodo onSubmit={addTodo}/>
+			{content}
+		</View>);
+	}
+;
 
 const styles = StyleSheet.create({
 	imgWrap: {
@@ -36,8 +59,8 @@ const styles = StyleSheet.create({
 		height: 300
 	},
 	image: {
-		width:'100%',
-		height:'100%',
+		width: '100%',
+		height: '100%',
 		resizeMode: 'contain'
 	}
 });

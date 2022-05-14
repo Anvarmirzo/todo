@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
-import {Button, Modal, View, TextInput, StyleSheet, Alert} from 'react-native';
+import {Modal, View, TextInput, StyleSheet, Alert} from 'react-native';
 import {THEME} from '../theme';
+import {AppButton} from './ui/AppButton';
 
 export const EditModal = ({isVisible, onCancel, onSave, value}) => {
 	const [title, setTitle] = useState(value);
 	const saveHandler = () => {
 		if (title.trim().length < 3) {
 			Alert.alert('Error', 'Title must be at least 3 characters long', [{text: 'OK'}]);
-		}else {
+		} else {
 			onSave(title);
 		}
 	};
@@ -26,8 +27,12 @@ export const EditModal = ({isVisible, onCancel, onSave, value}) => {
 
 				/>
 				<View style={styles.buttons}>
-					<Button title="Cancel" onPress={onCancel} color={THEME.DANGER_COLOR}/>
-					<Button title="Save" onPress={saveHandler}/>
+					<AppButton onPress={onCancel} color={THEME.DANGER_COLOR}>
+						Cancel
+					</AppButton>
+					<AppButton onPress={saveHandler}>
+						Save
+					</AppButton>
 				</View>
 			</View>
 
